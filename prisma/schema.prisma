@@ -1,0 +1,661 @@
+// Prisma schema — Personal Productivity Tracking System
+// Spec: docs/PROJECT_SPECIFICATION.md (§5 Core Domain Entities)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────── Enums ───────────────────────────
+
+enum TrackerType {
+  DSA
+  WEB_DEV
+  AI_ML
+  ENGLISH
+  APTITUDE
+  COLLEGE
+  PROJECT
+}
+
+enum TrackerStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  DONE
+  REVISION
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum ProblemStatus {
+  NOT_STARTED
+  ATTEMPTED
+  SOLVED
+  REVISION
+}
+
+enum HabitFrequency {
+  DAILY
+  WEEKDAYS
+  WEEKLY
+  CUSTOM
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+  FAILED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ApplicationStatus {
+  APPLIED
+  SCREENING
+  INTERVIEW
+  OFFER
+  REJECTED
+  WITHDRAWN
+}
+
+enum MockInterviewType {
+  TECHNICAL
+  DSA
+  SYSTEM_DESIGN
+  HR
+  BEHAVIORAL
+  CODING
+}
+
+enum ReviewType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum NotificationType {
+  XP
+  BADGE
+  REMINDER
+  CHALLENGE
+  SYSTEM
+}
+
+enum ChallengeType {
+  DAILY_STREAK
+  PROBLEM_COUNT
+  FOCUS_HOURS
+  HABIT_COUNT
+  XP_TARGET
+  CUSTOM
+}
+
+enum ChallengeStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+}
+
+enum XpTransactionType {
+  EARN
+  SPEND
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+// ─────────────────────────── User ───────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  emailVerified DateTime?
+  image        String?
+  password     String? // bcrypt hash; null when using OAuth
+  role         String    @default("USER")
+
+  // Gamification state (denormalized for fast reads; ledger in XpTransaction)
+  xp          Int    @default(0)
+  coins       Int    @default(0)
+  level       Int    @default(1)
+  currentStreak Int  @default(0)
+  bestStreak  Int    @default(0)
+
+  // Preferences
+  timezone      String   @default("Asia/Kolkata")
+  dailyGoalMinutes Int   @default(180)
+  weeklyGoalMinutes  Int @default(1260)
+  darkMode      Boolean  @default(true)
+  onboardingComplete Boolean @default(false)
+  placementTargetDate DateTime?
+  plan          String   @default("FREE") // FREE | PRO
+
+  // Relations
+  sessions            StudySession[]
+  habitLogs           HabitLog[]
+  habits              Habit[]
+  goals               Goal[]
+  goalProgress        GoalProgress[]
+  projects            Project[]
+  topics              Topic[]
+  topicLogs           TopicLog[]
+  problems            Problem[]
+  problemAttempts     ProblemAttempt[]
+  collegeTasks        CollegeTask[]
+  applications        Application[]
+  mockInterviews      MockInterview[]
+  speakingLogs        SpeakingLog[]
+  aptitudeAttempts    AptitudeAttempt[]
+  xpTransactions      XpTransaction[]
+  userBadges          UserBadge[]
+  userChallenges      UserChallenge[]
+  reviews             Review[]
+  aiPrompts           AIPrompt[]
+  notifications       Notification[]
+  calendarEvents      CalendarEvent[]
+  accounts            Account[]
+  authSessions        Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
+// ──────────────── Auth.js (NextAuth) adapter tables ─────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─────────────────────── Study sessions ─────────────────────
+
+// A tracked focus session ("Forest"/Pomodoro style timer session)
+model StudySession {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  trackerType TrackerType
+  topic       Topic?   @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  topicId     String?
+  topicName   String
+  startedAt   DateTime
+  endedAt     DateTime?
+  durationMin Int
+  notes       String?
+  xpEarned    Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, startedAt])
+  @@index([userId, trackerType])
+}
+
+// ─────────────────────────── Habits ─────────────────────────
+
+model Habit {
+  id          String        @id @default(cuid())
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  name        String
+  description String?
+  icon        String?
+  color       String?
+  frequency   HabitFrequency @default(DAILY)
+  daysOfWeek  Int[] // bitmask: 1=Mon … 128=Sun (used for WEEKDAYS/CUSTOM)
+  targetCount Int           @default(1)
+  unit        String? // "times", "problems", "minutes"…
+  trackerType TrackerType? // optional link to a tracker
+  active      Boolean       @default(true)
+
+  currentStreak Int @default(0)
+  bestStreak    Int @default(0)
+  totalCompletions Int @default(0)
+
+  logs HabitLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, active])
+}
+
+model HabitLog {
+  id      String @id @default(cuid())
+  habit   Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  habitId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  date    DateTime @db.Date
+  count   Int      @default(1)
+  note    String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([habitId, userId, date])
+  @@index([userId, date])
+}
+
+// ─────────────────────────── Goals ──────────────────────────
+
+model Goal {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  title       String
+  description String?
+  category    TrackerType?
+  status      GoalStatus  @default(ACTIVE)
+  priority    Priority    @default(MEDIUM)
+  targetDate  DateTime?
+  startDate   DateTime    @default(now())
+  milestones  Json // [{ id, title, done }]
+  progress    Float       @default(0) // 0..100, denormalized
+
+  progressLogs GoalProgress[]
+  xpEarned     Int         @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+}
+
+model GoalProgress {
+  id     String @id @default(cuid())
+  goal   Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  goalId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  date   DateTime @db.Date
+  progress Float
+  note   String?
+
+  @@unique([goalId, date])
+  @@index([userId, date])
+}
+
+// ────────────────────────── Projects ────────────────────────
+
+model Project {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  name        String
+  description String?
+  category    TrackerType // WEB_DEV, AI_ML, or PROJECT
+  repoUrl     String?
+  liveUrl     String?
+  status      TrackerStatus @default(IN_PROGRESS)
+  techStack   String[]
+  featured    Boolean     @default(false) // shown in resume/portfolio
+  progress    Float       @default(0)
+  startedAt   DateTime    @default(now())
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, category])
+}
+
+// ─────────────────────────── Topics ─────────────────────────
+
+model Topic {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  trackerType TrackerType
+  name        String
+  parentId    String?
+  status      TrackerStatus @default(NOT_STARTED)
+  notes       String?
+  totalSessions Int       @default(0)
+  totalMinutes  Int       @default(0)
+
+  logs         TopicLog[]
+  sessions     StudySession[]
+  problems     Problem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, trackerType])
+}
+
+model TopicLog {
+  id      String @id @default(cuid())
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  date    DateTime @db.Date
+  status  TrackerStatus
+  note    String?
+
+  @@index([userId, date])
+  @@index([topicId, date])
+}
+
+// ─────────────────── DSA problems & attempts ────────────────
+
+model Problem {
+  id         String       @id @default(cuid())
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  topic      Topic?       @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  topicId    String?
+  title      String
+  url        String?
+  platform   String? // LeetCode, GfG, Codeforces…
+  difficulty Difficulty   @default(MEDIUM)
+  tags       String[]
+  status     ProblemStatus @default(NOT_STARTED)
+  notes      String?
+  xpEarned   Int          @default(0)
+  solvedAt   DateTime?
+
+  attempts ProblemAttempt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([userId, difficulty])
+  @@index([topicId])
+}
+
+model ProblemAttempt {
+  id        String   @id @default(cuid())
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  date      DateTime @default(now())
+  status    ProblemStatus
+  durationMin Int?
+  note      String?
+
+  @@index([userId, date])
+}
+
+// ─────────────────────── College tasks ──────────────────────
+
+model CollegeTask {
+  id          String     @id @default(cuid())
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  title       String
+  type        String // ASSIGNMENT | ATTENDANCE | CLASS | EXAM | LAB
+  subject     String
+  dueDate     DateTime?
+  status      TaskStatus @default(PENDING)
+  priority    Priority   @default(MEDIUM)
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+}
+
+// ──────────────────── Placement & interviews ────────────────
+
+model Application {
+  id           String            @id @default(cuid())
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  company      String
+  role         String
+  url          String?
+  location     String?
+  salary       String?
+  status       ApplicationStatus @default(APPLIED)
+  appliedAt    DateTime          @default(now())
+  lastUpdated  DateTime          @default(now())
+  nextRoundAt  DateTime?
+  notes        String?
+  resumeVersion String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, status])
+}
+
+model MockInterview {
+  id         String           @id @default(cuid())
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  date       DateTime
+  type       MockInterviewType
+  durationMin Int?
+  topic      String?
+  selfRating Int? // 1-10
+  questions  Json // [{ question, answer, rating }]
+  feedback   String?
+  xpEarned   Int              @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, date])
+}
+
+model SpeakingLog {
+  id          String @id @default(cuid())
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  date        DateTime @db.Date
+  durationMin Int
+  fluency     Int? // 1-10
+  confidence  Int? // 1-10
+  topic       String?
+  notes       String?
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model AptitudeAttempt {
+  id        String @id @default(cuid())
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  date      DateTime @db.Date
+  section   String? // Quantitative, Logical, Verbal…
+  questions Int
+  correct   Int
+  durationMin Int?
+  notes     String?
+
+  @@index([userId, date])
+}
+
+// ─────────────────────── Gamification ───────────────────────
+
+model XpTransaction {
+  id        String           @id @default(cuid())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  type      XpTransactionType @default(EARN)
+  xp        Int
+  coins     Int
+  source    String // "STUDY_SESSION", "HABIT", "PROBLEM", "GOAL_MILESTONE"…
+  sourceId  String?
+  note      String?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model Badge {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  name        String
+  description String
+  icon        String
+  tier        Int      @default(1) // 1 bronze, 2 silver, 3 gold, 4 platinum
+  condition   Json // { type, threshold } evaluated in lib/domain/gamification
+
+  userBadges UserBadge[]
+
+  createdAt DateTime @default(now())
+}
+
+model UserBadge {
+  id      String @id @default(cuid())
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  badge   Badge  @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  badgeId String
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+}
+
+model Challenge {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  type        ChallengeType
+  target      Int // completion threshold
+  rewardXp    Int
+  rewardCoins Int
+  startsAt    DateTime
+  endsAt      DateTime
+  status      ChallengeStatus @default(ACTIVE)
+
+  userChallenges UserChallenge[]
+
+  @@index([status])
+}
+
+model UserChallenge {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  challengeId String
+  progress    Int       @default(0)
+  completedAt DateTime?
+  claimed     Boolean   @default(false)
+
+  @@unique([userId, challengeId])
+  @@index([userId])
+}
+
+// ─────────────────────── Reviews / AI ───────────────────────
+
+model Review {
+  id        String     @id @default(cuid())
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  type      ReviewType
+  periodKey String // "2026-08-03" (daily) | "2026-W32" (weekly) | "2026-08" | "2026"
+  title     String
+  summary   String
+  content   Json // structured report payload
+  createdAt DateTime   @default(now())
+
+  @@unique([userId, type, periodKey])
+  @@index([userId, type])
+}
+
+model AIPrompt {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  kind      String // COACH | MOCK_INTERVIEW | PROBLEM_RECS | STUDY_PLAN | SPEAKING_PARTNER | REVIEW
+  prompt    String
+  response  String
+  model     String?
+  tokensIn  Int?
+  tokensOut Int?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  type      NotificationType @default(SYSTEM)
+  title     String
+  body      String?
+  read      Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
+}
+
+model CalendarEvent {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  title     String
+  startsAt  DateTime
+  endsAt    DateTime
+  allDay    Boolean  @default(false)
+  category  String? // STUDY | COLLEGE | INTERVIEW | MEETING | PERSONAL
+  color     String?
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, startsAt])
+}

@@ -1,0 +1,67 @@
+=====================================================================
+ MOMENTUM — Personal Productivity OS
+ Project build tracker + personal study plan
+=====================================================================
+LAST UPDATED: 2026-08-04
+
+---------------------------------------------------------------------
+ 1. PROJECT BUILD STATUS
+---------------------------------------------------------------------
+Goal : complete all 21 modules from docs/PROJECT_SPECIFICATION.md
+Stack: Next.js 16 / React 19 / TS strict / Tailwind v4 / shadcn/ui /
+       Prisma 7 / PostgreSQL / NextAuth v5 / Recharts / Big Calendar
+
+DONE (verified working):
+ [x] Spec written (docs/PROJECT_SPECIFICATION.md)
+ [x] Scaffold Next.js 16.2 + all deps installed
+ [x] Prisma schema (23 models, 15 enums) + 2 migrations on local PG
+ [x] Auth: NextAuth v5 credentials, JWT sessions, E2E login verified
+ [x] App shell: sidebar / topbar / mobile nav / theme / providers
+ [x] Dashboard (/dashboard) — data layer + UI, build + lint pass
+ [x] Shared infra: ActionState, tracker config, UI helpers
+
+WRITTEN (needs final compile verification):
+ [~] Daily Planner (/daily) — focus timer, session log + list, stats
+ [~] Habits (/habits) — habit cards, 14-day strip, streaks, dialog
+
+PENDING:
+ [ ] Calendar (/calendar) — react-big-calendar + events CRUD
+ [ ] Trackers (7 pages) — DSA / WebDev / AI-ML / English / Aptitude /
+     College / Projects (topics + projects + problems + logs)
+ [ ] Placement — /placement (pipeline), resume, portfolio, interview
+ [ ] Analytics (/analytics) + Reports (/reports)
+ [ ] Goals (/goals)
+ [ ] Gamification (/gamification) + badge/challenge seed
+ [ ] AI Coach (/ai-coach) + /api/ai/coach
+ [ ] Settings (/settings)
+ [ ] Final build + lint + typecheck + E2E verification
+
+---------------------------------------------------------------------
+ 2. PERSONAL STUDY PLAN (2-WEEK LOCK-IN)
+---------------------------------------------------------------------
+Added: 2026-08-04 (user's plan)
+Rule : if a day slips, only MERN moves — DSA and AI/ML blocks are fixed.
+Review after 2 weeks: check what actually slipped.
+
+DAILY (Mon-Fri):
+  5:00-7:00pm     DSA
+  7:00-8:00pm     AI/ML practice (30 min doing, rest buffer)
+  8:00-8:30pm     Buffer block (late lab / hard problem)
+  8:30-8:45pm     Break
+  8:45-10:45pm    MERN build (project-driven: 1h build + need-only classes)
+ 10:45-11:15pm    Buffer block
+ 11:15-11:30pm    Break
+ 11:30pm-12:30am  College work / catch-up
+ 12:30-1:00am     Communication (English) / aptitude / wind-down
+  1:00-2:00am     Sleep lever — if done by 12:30am, sleep
+
+Fixed protections:
+ - 2 x 15-min buffers  -> a slip doesn't kill the day
+ - Sleep lever         -> banked hours = week-4 insurance
+ - 30-min afternoon nap daily (single most important fix)
+ - Saturday: 4h only (DSA + AI/ML practice + aptitude/comm), then stop
+ - Sunday:   2h max (weekly recap + plan) — real recovery day
+
+TODO (next actions):
+ [ ] Wire this schedule into the app (Daily Planner schedule view)
+ [ ] Day 1-7 topic breakdown (offered, pending user confirmation)

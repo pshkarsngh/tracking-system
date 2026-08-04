@@ -1,0 +1,380 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ────────────────────────── Theme tokens ────────────────────────── */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-glow: var(--glow);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ── Light (default) ─────────────────────────────────────────────── */
+:root {
+  --background: oklch(0.985 0.003 285);
+  --foreground: oklch(0.2 0.03 285);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.03 285);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.03 285);
+  --primary: oklch(0.55 0.22 285);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.95 0.01 285);
+  --secondary-foreground: oklch(0.25 0.03 285);
+  --muted: oklch(0.95 0.01 285);
+  --muted-foreground: oklch(0.52 0.02 285);
+  --accent: oklch(0.94 0.02 285);
+  --accent-foreground: oklch(0.25 0.03 285);
+  --destructive: oklch(0.6 0.22 25);
+  --border: oklch(0.9 0.01 285);
+  --input: oklch(0.9 0.01 285);
+  --ring: oklch(0.55 0.22 285);
+  --glow: oklch(0.62 0.22 285);
+  --chart-1: oklch(0.55 0.22 285);
+  --chart-2: oklch(0.66 0.22 315);
+  --chart-3: oklch(0.7 0.15 165);
+  --chart-4: oklch(0.75 0.16 85);
+  --chart-5: oklch(0.65 0.2 20);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.98 0.003 285);
+  --sidebar-foreground: oklch(0.2 0.03 285);
+  --sidebar-primary: oklch(0.55 0.22 285);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.94 0.02 285);
+  --sidebar-accent-foreground: oklch(0.25 0.03 285);
+  --sidebar-border: oklch(0.9 0.01 285);
+  --sidebar-ring: oklch(0.55 0.22 285);
+}
+
+/* ── Dark (dark mode first) ──────────────────────────────────────── */
+.dark {
+  --background: oklch(0.13 0.018 285);
+  --foreground: oklch(0.95 0.008 285);
+  --card: oklch(0.17 0.02 285);
+  --card-foreground: oklch(0.95 0.008 285);
+  --popover: oklch(0.18 0.02 285);
+  --popover-foreground: oklch(0.95 0.008 285);
+  --primary: oklch(0.62 0.22 285);
+  --primary-foreground: oklch(0.99 0.005 285);
+  --secondary: oklch(0.24 0.02 285);
+  --secondary-foreground: oklch(0.95 0.008 285);
+  --muted: oklch(0.23 0.018 285);
+  --muted-foreground: oklch(0.68 0.015 285);
+  --accent: oklch(0.26 0.03 285);
+  --accent-foreground: oklch(0.97 0.008 285);
+  --destructive: oklch(0.66 0.2 25);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.62 0.22 285);
+  --glow: oklch(0.62 0.22 285);
+  --chart-1: oklch(0.62 0.22 285);
+  --chart-2: oklch(0.68 0.22 315);
+  --chart-3: oklch(0.72 0.15 165);
+  --chart-4: oklch(0.78 0.16 85);
+  --chart-5: oklch(0.68 0.2 20);
+  --sidebar: oklch(0.14 0.02 285);
+  --sidebar-foreground: oklch(0.93 0.01 285);
+  --sidebar-primary: oklch(0.62 0.22 285);
+  --sidebar-primary-foreground: oklch(0.99 0.005 285);
+  --sidebar-accent: oklch(0.23 0.03 285);
+  --sidebar-accent-foreground: oklch(0.95 0.008 285);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.62 0.22 285);
+}
+
+/* ─────────────────────────── Base ──────────────────────────────── */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 30%, transparent);
+  }
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--muted-foreground) 25%, transparent);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--muted-foreground) 45%, transparent);
+    background-clip: content-box;
+    border: 2px solid transparent;
+  }
+}
+
+/* ───────────────────────── Utilities ───────────────────────────── */
+
+@layer utilities {
+  /* Glassmorphism card (spec §10) */
+  .glass {
+    background: color-mix(in oklab, var(--card) 72%, transparent);
+    backdrop-filter: blur(20px);
+    border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  }
+  .glass-strong {
+    background: color-mix(in oklab, var(--card) 88%, transparent);
+    backdrop-filter: blur(28px);
+    border: 1px solid color-mix(in oklab, var(--border) 90%, transparent);
+  }
+
+  /* Indigo → violet primary gradient */
+  .bg-gradient-primary {
+    background-image: linear-gradient(135deg, oklch(0.62 0.22 285), oklch(0.68 0.22 315));
+  }
+  .text-gradient {
+    background-image: linear-gradient(135deg, oklch(0.65 0.22 285), oklch(0.75 0.2 315));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Ambient glow used behind dashboards */
+  .ambient-glow {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(600px 400px at 12% -5%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 65%),
+      radial-gradient(700px 500px at 95% 0%, color-mix(in oklab, oklch(0.68 0.22 315) 14%, transparent), transparent 60%),
+      radial-gradient(900px 600px at 50% 110%, color-mix(in oklab, oklch(0.6 0.15 220) 10%, transparent), transparent 60%);
+  }
+
+  /* Hide scrollbar for horizontal scrollers */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ───────────────────── react-big-calendar theme ───────────────────── */
+
+.rbc-calendar-theme .rbc-calendar {
+  color: var(--foreground);
+  font-size: 13px;
+}
+.rbc-calendar-theme .rbc-toolbar {
+  margin-bottom: 12px;
+  gap: 8px;
+}
+.rbc-calendar-theme .rbc-toolbar .rbc-toolbar-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--foreground);
+}
+.rbc-calendar-theme .rbc-btn-group button {
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 70%, transparent);
+  color: var(--foreground);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  transition: background 0.15s ease;
+}
+.rbc-calendar-theme .rbc-btn-group button:hover,
+.rbc-calendar-theme .rbc-btn-group button.rbc-active {
+  background: color-mix(in oklab, var(--primary) 85%, white);
+  color: var(--primary-foreground);
+  border-color: transparent;
+  box-shadow: none;
+}
+.rbc-calendar-theme .rbc-btn-group button + button {
+  margin-left: 0;
+  border-left-width: 1px;
+}
+.rbc-calendar-theme .rbc-btn-group button + button {
+  border-left: 1px solid var(--border);
+}
+.rbc-calendar-theme .rbc-header {
+  padding: 6px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+  border-bottom: 1px solid var(--border);
+}
+.rbc-calendar-theme .rbc-month-view,
+.rbc-calendar-theme .rbc-time-view,
+.rbc-calendar-theme .rbc-agenda-view table {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--card) 55%, transparent);
+}
+.rbc-calendar-theme .rbc-month-view {
+  border-radius: 12px;
+}
+.rbc-calendar-theme .rbc-month-header {
+  border-bottom: 1px solid var(--border);
+}
+.rbc-calendar-theme .rbc-month-row + .rbc-month-row {
+  border-top: 1px solid var(--border);
+}
+.rbc-calendar-theme .rbc-day-bg {
+  border-left: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+.rbc-calendar-theme .rbc-day-bg:first-child,
+.rbc-calendar-theme .rbc-off-range-bg:first-child {
+  border-left: none;
+}
+.rbc-calendar-theme .rbc-off-range-bg {
+  background: color-mix(in oklab, var(--muted) 45%, transparent);
+}
+.rbc-calendar-theme .rbc-off-range .rbc-date-cell {
+  color: var(--muted-foreground);
+  opacity: 0.55;
+}
+.rbc-calendar-theme .rbc-today {
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+}
+.rbc-calendar-theme .rbc-date-cell {
+  padding: 4px 6px;
+  font-size: 12px;
+  color: var(--foreground);
+  text-align: right;
+}
+.rbc-calendar-theme .rbc-date-cell.rbc-now {
+  font-weight: 700;
+  color: var(--primary);
+}
+.rbc-calendar-theme .rbc-date-cell a {
+  color: var(--foreground);
+}
+.rbc-calendar-theme .rbc-date-cell.rbc-now a {
+  color: var(--primary);
+}
+.rbc-calendar-theme .rbc-event {
+  border: none;
+  padding: 2px 6px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+}
+.rbc-calendar-theme .rbc-event:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+.rbc-calendar-theme .rbc-event.rbc-selected {
+  background-color: inherit;
+}
+.rbc-calendar-theme .rbc-show-more {
+  color: var(--primary);
+  font-weight: 600;
+  background: transparent;
+}
+.rbc-calendar-theme .rbc-time-header,
+.rbc-calendar-theme .rbc-time-content {
+  border-color: var(--border);
+}
+.rbc-calendar-theme .rbc-timeslot-group {
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+.rbc-calendar-theme .rbc-time-content .rbc-day-slot {
+  border-left: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+.rbc-calendar-theme .rbc-time-content .rbc-day-slot:first-child {
+  border-left: none;
+}
+.rbc-calendar-theme .rbc-current-time-indicator {
+  background-color: var(--primary);
+}
+.rbc-calendar-theme .rbc-agenda-view table.rbc-agenda-table {
+  font-size: 13px;
+}
+.rbc-calendar-theme .rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
+  padding: 8px 12px;
+  color: var(--foreground);
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+.rbc-calendar-theme .rbc-agenda-view table.rbc-agenda-table thead > tr > th {
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+}
+.rbc-calendar-theme .rbc-agenda-empty {
+  color: var(--muted-foreground);
+  padding: 24px;
+  text-align: center;
+}
+.rbc-calendar-theme .rbc-time-gutter,
+.rbc-calendar-theme .rbc-label {
+  color: var(--muted-foreground);
+  font-size: 11px;
+}
