@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import { BookOpen, Plus, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { TrackerTypeValue } from "@/config/trackers";
-import type { TopicDTO } from "@/features/trackers/server";
-import { TOPIC_STATUSES_LABEL } from "@/features/trackers/server";
+import type { TopicDTO } from "@/features/trackers/types";
+import { TOPIC_STATUSES_LABEL } from "@/features/trackers/types";
 import {
   createTopicAction,
   updateTopicStatusAction,

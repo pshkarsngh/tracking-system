@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CheckCircle2, Flame, Repeat } from "lucide-react";
 import { requireUser } from "@/lib/server/auth";
 import { getHabitsData } from "@/features/habits/server";
+import type { HabitWithData } from "@/features/habits/types";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatCard } from "@/components/shared/stat-card";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -16,7 +17,7 @@ export default async function HabitsPage() {
   const data = await getHabitsData(user.id);
 
   const avgStreak =
-    data.habits.length > 0 ? Math.round(data.habits.reduce((s, h) => s + h.currentStreak, 0) / data.habits.length) : 0;
+    data.habits.length > 0 ? Math.round(data.habits.reduce((s: number, h: HabitWithData) => s + h.currentStreak, 0) / data.habits.length) : 0;
 
   return (
     <>
@@ -44,7 +45,7 @@ export default async function HabitsPage() {
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {data.habits.map((habit) => (
+          {data.habits.map((habit: HabitWithData) => (
             <HabitCard key={habit.id} habit={habit} />
           ))}
         </div>

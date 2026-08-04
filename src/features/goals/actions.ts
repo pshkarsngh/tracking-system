@@ -1,3 +1,5 @@
+"use server";
+
 import { randomUUID } from "crypto";
 import { prisma } from "@/lib/db";
 import { requireUserAction } from "@/lib/server/auth";

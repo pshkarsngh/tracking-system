@@ -5,7 +5,7 @@ import { useActionState } from "react";
 import { toast } from "sonner";
 import { MessageSquare, Plus } from "lucide-react";
 import { createSpeakingLogAction, deleteSpeakingLogAction } from "@/features/trackers/actions";
-import type { SpeakingLogDTO } from "@/features/trackers/server";
+import type { SpeakingLogDTO } from "@/features/trackers/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

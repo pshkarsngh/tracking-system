@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Calculator, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createAptitudeAttemptAction, deleteAptitudeAttemptAction } from "@/features/trackers/actions";
-import type { AptitudeAttemptDTO } from "@/features/trackers/server";
+import type { AptitudeAttemptDTO } from "@/features/trackers/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

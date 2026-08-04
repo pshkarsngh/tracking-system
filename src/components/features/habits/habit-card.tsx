@@ -4,7 +4,7 @@ import { useEffect, useActionState } from "react";
 import { toast } from "sonner";
 import { CheckCircle2, Circle, Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { HabitWithData } from "@/features/habits/server";
+import type { HabitWithData } from "@/features/habits/types";
 import { toggleHabitForDateAction, deleteHabitAction } from "@/features/habits/actions";
 import { DeleteButton } from "@/components/shared/delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

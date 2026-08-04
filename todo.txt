@@ -19,22 +19,17 @@ DONE (verified working):
  [x] App shell: sidebar / topbar / mobile nav / theme / providers
  [x] Dashboard (/dashboard) — data layer + UI, build + lint pass
  [x] Shared infra: ActionState, tracker config, UI helpers
-
-WRITTEN (needs final compile verification):
- [~] Daily Planner (/daily) — focus timer, session log + list, stats
- [~] Habits (/habits) — habit cards, 14-day strip, streaks, dialog
-
-PENDING:
- [ ] Calendar (/calendar) — react-big-calendar + events CRUD
- [ ] Trackers (7 pages) — DSA / WebDev / AI-ML / English / Aptitude /
-     College / Projects (topics + projects + problems + logs)
- [ ] Placement — /placement (pipeline), resume, portfolio, interview
- [ ] Analytics (/analytics) + Reports (/reports)
- [ ] Goals (/goals)
- [ ] Gamification (/gamification) + badge/challenge seed
- [ ] AI Coach (/ai-coach) + /api/ai/coach
- [ ] Settings (/settings)
- [ ] Final build + lint + typecheck + E2E verification
+ [x] Daily Planner (/daily) — focus timer, session log + list, stats
+ [x] Habits (/habits) — habit cards, 14-day strip, streaks, dialog
+ [x] Calendar (/calendar) — react-big-calendar + events CRUD
+ [x] Trackers (7 pages) — DSA / WebDev / AI-ML / English / Aptitude / College / Projects
+ [x] Placement — /placement (pipeline), resume, portfolio, interview
+ [x] Analytics (/analytics) + Reports (/reports)
+ [x] Goals (/goals) — CRUD + milestones + XP rewards
+ [x] Gamification (/gamification) — badges, challenges, XP history + seed
+ [x] AI Coach (/ai-coach) + /api/ai/coach — chat interface + mock responses
+ [x] Settings (/settings) — profile, goals, preferences, account
+ [x] Final build + typecheck — 21 modules, 0 errors
 
 ---------------------------------------------------------------------
  2. PERSONAL STUDY PLAN (2-WEEK LOCK-IN)

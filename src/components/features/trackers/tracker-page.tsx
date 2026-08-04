@@ -1,6 +1,6 @@
 import { BookOpen, Clock3, Flame, Zap } from "lucide-react";
 import { TRACKER_META, type TrackerTypeValue } from "@/config/trackers";
-import type { TrackerData } from "@/features/trackers/server";
+import type { TrackerData } from "@/features/trackers/types";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatCard } from "@/components/shared/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

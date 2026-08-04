@@ -5,8 +5,8 @@ import { useActionState } from "react";
 import { toast } from "sonner";
 import { Archive, Check, CheckCircle2, Flag, Plus, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { GoalDTO } from "@/features/goals/server";
-import { GOAL_CATEGORY_LABEL, PRIORITY_META } from "@/features/goals/server";
+import type { GoalDTO } from "@/features/goals/types";
+import { GOAL_CATEGORY_LABEL, PRIORITY_META } from "@/features/goals/types";
 import {
   createGoalAction,
   updateGoalAction,

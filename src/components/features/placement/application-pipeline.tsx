@@ -5,8 +5,8 @@ import { useActionState } from "react";
 import { toast } from "sonner";
 import { Briefcase, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { ApplicationDTO } from "@/features/placement/server";
-import { STATUS_ORDER_LABEL } from "@/features/placement/server";
+import type { ApplicationDTO } from "@/features/placement/types";
+import { STATUS_ORDER_LABEL } from "@/features/placement/types";
 import {
   createApplicationAction,
   updateApplicationAction,

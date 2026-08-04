@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { ExternalLink, FolderGit2, GitBranch, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { TrackerTypeValue } from "@/config/trackers";
-import type { ProjectDTO } from "@/features/trackers/server";
+import type { ProjectDTO } from "@/features/trackers/types";
 import { createProjectAction, updateProjectAction, deleteProjectAction } from "@/features/trackers/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

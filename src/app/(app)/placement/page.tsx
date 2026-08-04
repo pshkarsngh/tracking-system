@@ -6,6 +6,7 @@ import { ApplicationPipeline, ApplicationDialog } from "@/components/features/pl
 import { ReadinessCard } from "@/components/features/placement/readiness-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarClock } from "lucide-react";
+import type { ApplicationDTO } from "@/features/placement/types";
 
 export const metadata: Metadata = { title: "Placement" };
 export const dynamic = "force-dynamic";
@@ -15,8 +16,8 @@ export default async function PlacementPage() {
   const data = await getPlacementData(user.id);
 
   const upcoming = data.applications
-    .filter((a) => a.nextRoundAt && a.status !== "OFFER" && a.status !== "REJECTED" && a.status !== "WITHDRAWN")
-    .sort((a, b) => (a.nextRoundAt!.getTime() - b.nextRoundAt!.getTime()))
+    .filter((a: ApplicationDTO) => a.nextRoundAt && a.status !== "OFFER" && a.status !== "REJECTED" && a.status !== "WITHDRAWN")
+    .sort((a: ApplicationDTO, b: ApplicationDTO) => (a.nextRoundAt!.getTime() - b.nextRoundAt!.getTime()))
     .slice(0, 5);
 
   return (
@@ -36,7 +37,7 @@ export default async function PlacementPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {upcoming.map((a) => (
+                  {upcoming.map((a: ApplicationDTO) => (
                     <div key={a.id} className="rounded-xl border border-border/60 bg-background/40 px-3 py-2">
                       <p className="text-xs font-semibold">{a.company}</p>
                       <p className="text-[11px] text-muted-foreground">

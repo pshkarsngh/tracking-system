@@ -9,7 +9,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { toast } from "sonner";
 import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { CalendarEventDTO } from "@/features/calendar/server";
+import type { CalendarEventDTO } from "@/features/calendar/types";
 import { saveEventAction, deleteEventAction, CATEGORY_META, CALENDAR_CATEGORIES } from "@/features/calendar/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

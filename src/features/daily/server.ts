@@ -1,27 +1,7 @@
 import { prisma } from "@/lib/db";
 import { todayKey, toDateKey } from "@/lib/domain/dates";
-
-export interface DailySession {
-  id: string;
-  trackerType: string;
-  topicName: string;
-  durationMin: number;
-  xpEarned: number;
-  startedAt: Date;
-  notes: string | null;
-}
-
-export interface DailyData {
-  dateKey: string;
-  label: string;
-  focusMinutes: number;
-  xpEarned: number;
-  sessionCount: number;
-  goalMinutes: number;
-  yesterdayMinutes: number;
-  sessions: DailySession[];
-  topicsByTracker: { trackerType: string; topics: { id: string; name: string }[] }[];
-}
+import type { DailyData } from "./types";
+export type { DailySession, DailyData } from "./types";
 
 export async function getDailyData(userId: string, dateKey?: string): Promise<DailyData> {
   const key = dateKey ?? todayKey();

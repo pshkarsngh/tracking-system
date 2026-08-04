@@ -1,6 +1,6 @@
 import { ShieldCheck } from "lucide-react";
 import { gradeFor } from "@/lib/domain/scores";
-import type { ReadinessBreakdown } from "@/features/placement/server";
+import type { ReadinessBreakdown } from "@/features/placement/types";
 import { ProgressRing } from "@/components/shared/progress-ring";
 import { ScoreBar } from "@/components/shared/score-bar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

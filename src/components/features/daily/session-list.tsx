@@ -3,7 +3,7 @@
 import { NotebookPen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { trackerLabel } from "@/config/trackers";
-import type { DailySession } from "@/features/daily/server";
+import type { DailySession } from "@/features/daily/types";
 import { deleteSessionAction } from "@/features/daily/actions";
 import { DeleteButton } from "@/components/shared/delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

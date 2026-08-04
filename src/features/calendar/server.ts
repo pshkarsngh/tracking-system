@@ -1,23 +1,7 @@
 import { prisma } from "@/lib/db";
 import { todayKey, fromDateKey, addDaysToKey } from "@/lib/domain/dates";
-
-export interface CalendarEventDTO {
-  id: string;
-  title: string;
-  startsAt: Date;
-  endsAt: Date;
-  allDay: boolean;
-  category: string | null;
-  color: string | null;
-  notes: string | null;
-}
-
-export interface CalendarData {
-  events: CalendarEventDTO[];
-  upcoming: { id: string; title: string; startsAt: Date; category: string | null; color: string | null }[];
-  todayKey: string;
-  eventsThisWeek: number;
-}
+import type { CalendarData } from "./types";
+export type { CalendarEventDTO, CalendarData } from "./types";
 
 /**
  * Load calendar events in a wide window (3 months back, 5 months ahead)

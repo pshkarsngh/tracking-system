@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CalendarHeart, CheckCircle2, FileText, GitBranch, Star } from "lucide-react";
+import type { FeaturedProjectDTO } from "@/features/placement/types";
 
 export const metadata: Metadata = { title: "Resume Builder" };
 export const dynamic = "force-dynamic";
@@ -85,7 +86,7 @@ export default async function ResumePage() {
                   No featured projects yet. Feature your best work from the portfolio page.
                 </p>
               )}
-              {data.featuredProjects.map((p) => (
+              {data.featuredProjects.map((p: FeaturedProjectDTO) => (
                 <div key={p.id} className="rounded-xl border border-border/60 bg-background/40 p-4">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="font-medium">{p.name}</h3>

@@ -48,7 +48,7 @@ export default async function CalendarPage() {
                 <p className="py-6 text-center text-sm text-muted-foreground">Nothing scheduled yet.</p>
               ) : (
                 <ul className="space-y-3">
-                  {data.upcoming.map((e) => (
+                  {data.upcoming.map((e: { id: string; title: string; startsAt: Date; category: string | null; color: string | null }) => (
                     <li key={e.id} className="flex items-start gap-2.5">
                       <span className="mt-1.5 size-2 shrink-0 rounded-full" style={{ backgroundColor: e.color ?? "#6366f1" }} />
                       <div className="min-w-0">
